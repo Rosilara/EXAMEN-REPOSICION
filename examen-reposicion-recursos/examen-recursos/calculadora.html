@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora iPhone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: #000;
+            border-radius: 25px;
+            padding: 20px;
+            width: 320px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+        }
+
+        .display {
+            background: #000;
+            color: white;
+            font-size: 4rem;
+            font-weight: 200;
+            text-align: right;
+            padding: 30px 20px;
+            margin-bottom: 20px;
+            border-radius: 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+
+        .display-text {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: -2px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Botones de números y punto decimal */
+        .btn-number {
+            background: #333333;
+            color: white;
+        }
+
+        .btn-number:hover {
+            background: #404040;
+        }
+
+        .btn-number:active {
+            background: #4a4a4a;
+        }
+
+        /* Botones de operaciones */
+        .btn-operator {
+            background: #ff9500;
+            color: white;
+            font-weight: 300;
+        }
+
+        .btn-operator:hover {
+            background: #ffb143;
+        }
+
+        .btn-operator:active {
+            background: #e8890b;
+        }
+
+        .btn-operator.active {
+            background: white;
+            color: #ff9500;
+        }
+
+        /* Botones de función (AC, +/-, %) */
+        .btn-function {
+            background: #a6a6a6;
+            color: black;
+            font-weight: 400;
+        }
+
+        .btn-function:hover {
+            background: #b8b8b8;
+        }
+
+        .btn-function:active {
+            background: #9a9a9a;
+        }
+
+        /* Botón cero (ocupa 2 columnas) */
+        .btn-zero {
+            grid-column: span 2;
+            border-radius: 32.5px;
+            justify-content: flex-start;
+            padding-left: 25px;
+        }
+
+        /* Estados especiales para demostración */
+        .btn-equals.highlighted {
+            background: white;
+            color: #ff9500;
+            transform: scale(1.05);
+        }
+
+        /* Animación de pulso para botones activos */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn.demo-active {
+            animation: pulse 0.3s ease-in-out;
+        }
+
+        /* Efectos de brillo */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+            border-radius: inherit;
+        }
+
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .calculator {
+                width: 100%;
+                max-width: 320px;
+            }
+            
+            .display {
+                font-size: 3.5rem;
+            }
+            
+            .btn {
+                height: 60px;
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1 class="title">📱 Calculadora iPhone</h1>
+        </div>
+        
+        <div class="calculator">
+            <div class="display">
+                <span class="display-text">42</span>
+            </div>
+            
+            <div class="buttons">
+                <!-- Fila 1: Funciones -->
+                <button class="btn btn-function">AC</button>
+                <button class="btn btn-function">+/-</button>
+                <button class="btn btn-function">%</button>
+                <button class="btn btn-operator">÷</button>
+                
+                <!-- Fila 2: 7, 8, 9, × -->
+                <button class="btn btn-number">7</button>
+                <button class="btn btn-number">8</button>
+                <button class="btn btn-number">9</button>
+                <button class="btn btn-operator">×</button>
+                
+                <!-- Fila 3: 4, 5, 6, - -->
+                <button class="btn btn-number">4</button>
+                <button class="btn btn-number">5</button>
+                <button class="btn btn-number">6</button>
+                <button class="btn btn-operator">−</button>
+                
+                
+                <!-- Fila 4: 1, 2, 3, + -->
+                <button class="btn btn-number">1</button> 
+                <button class="btn btn-number">2</button>
+                <button class="btn btn-number">3</button>
+                <button class="btn btn-operator active">+</button>
+                
+                <!-- Fila 5: 0, ., = -->
+                <button class="btn btn-number btn-zero">0</button>
+                <button class="btn btn-number">.</button>
+                <button class="btn btn-operator btn-equals highlighted">=</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="module" src="/js/calculadora.js"></script>
+
+</html>
